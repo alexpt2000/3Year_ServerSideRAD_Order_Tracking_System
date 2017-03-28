@@ -23,12 +23,10 @@ public class Product {
 	
 	@Column(name="PDESC")
 	@NotBlank
-	//@NotBlank(message = "May not be empty")
 	private String pDesc;
 	
 	@Column(name="QTYINSTOCK")
 	@Min(value=0)
-	//@Min(value=0, message = "Must be greater than or equal 0")
 	private int qtyInStock;
 	
 	@OneToMany(mappedBy="prod")
