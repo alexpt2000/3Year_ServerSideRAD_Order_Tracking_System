@@ -24,4 +24,8 @@ public class ProductsService {
 
 	}
 
+	public Product save(Product product) {
+		return productsRepository.save(product);
+	}
+
 }

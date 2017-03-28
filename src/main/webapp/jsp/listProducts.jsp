@@ -12,24 +12,33 @@
 </head>
 <body>
 
-	<h1>List of Customers</h1>
+	<h1>List of Products</h1>
 
-	<table>
+	<table border="1">
 		<tr>
-			<th>Customer ID</th>
-			<th>Name</th>
-			<th>Town</th>
-			<th>County</th>
+			<th>Product ID</th>
+			<th>Description</th>
+			<th>Quantity in Stock</th>
 		</tr>
-		<c:forEach items="${customerForm}" var="cust">
+		<c:forEach items="${productsForm}" var="prod">
 			<tr>
-				<td>${cust.cId}</td>
-				<td>${cust.cName}</td>
-				<td>${cust.cAddr.town}</td>
-				<td>${cust.cAddr.county}</td>
+				<td>${prod.pId}</td>
+				<td>${prod.pDesc}</td>
+				<td>${prod.qtyInStock}</td>
 			</tr>
 		</c:forEach>
+
 	</table>
+	<table>
+		<tr>
+			<td><a href="/">Home</a></td>
+			<td><a href="/addProduct">Add Products</a></td>
+			<td><a href="/showCustomers">List Customers</a></td>
+			<td><a href="/showOrders">List Orders</a></td>
+			<td><a href="/?logout">Logout</a></td>
+		</tr>
+	</table>
+
 
 </body>
 </html>
