@@ -34,6 +34,19 @@ public class MainControllers {
 
 	@Autowired
 	private OrdersService ordersService;
+	
+	/*
+	 * Login
+	 * 
+	 * 
+	 */
+	@RequestMapping(value = "/")
+	public String Login() {
+
+
+		return "login";
+	}
+	
 
 	/*
 	 * Products

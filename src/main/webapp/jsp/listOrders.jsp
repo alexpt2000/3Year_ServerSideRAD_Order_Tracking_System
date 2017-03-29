@@ -51,7 +51,7 @@
 			<td><a href="/addOrder">Add Orders</a></td>
 			<td><a href="/showProducts">List Products</a></td>
 	    	<td><a href="/showCustomers">List Customers</a></td>
-			<td><a href="/?logout">Logout</a></td>
+			<td><a href="/logout">Logout</a></td>
 		</tr>
 	</table>
 
