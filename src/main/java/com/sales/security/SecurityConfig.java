@@ -13,7 +13,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
   @Override
   public void configure(HttpSecurity httpSecurity) throws Exception{
     httpSecurity.authorizeRequests()
-     .antMatchers("/showProducts", "/showCustomers", "/showOrders", "/addProduct", "/addCustomer", "/addOrder")
+     .antMatchers("/showProducts", "/showCustomers", "/showOrders", "/addProduct", "/addCustomer", "/addOrder", "/showError")
      .hasRole("USER")
     .antMatchers("/index.html").permitAll()  // Allow index.html
     //.anyRequest().authenticated()

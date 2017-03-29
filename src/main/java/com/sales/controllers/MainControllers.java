@@ -2,6 +2,7 @@ package com.sales.controllers;
 
 import java.util.List;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,9 +18,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sales.exceptions.ErrorMsg;
 import com.sales.models.Customer;
 import com.sales.models.Order;
 import com.sales.models.Product;
@@ -28,6 +32,7 @@ import com.sales.services.OrdersService;
 import com.sales.services.ProductsService;
 
 @Controller
+@SessionAttributes(value = {"order", "product", "errorMgs"})
 public class MainControllers {
 
 	@Autowired
@@ -145,23 +150,46 @@ public class MainControllers {
 	}
 
 	@RequestMapping(value = "/addOrder", method = RequestMethod.GET)
-	public String addOrder(Model model) {
+	public String addOrder(ModelMap model) {
 		Order order = new Order();
+		ErrorMsg errorMgs = new ErrorMsg();
+		
 		model.addAttribute("order", order);
-
+		model.addAttribute("errorMgs", errorMgs);
+		
+		
 		return "addOrder";
 	}
 
 	@RequestMapping(value = "/addOrder", method = RequestMethod.POST)
-	public String addOrderPost(@ModelAttribute("order") @Valid Order order, BindingResult result) {
+	public String addOrderPost(@ModelAttribute("order") @Valid Order order, BindingResult result, @ModelAttribute("errorMgs") ErrorMsg errorMgs) {
 
 		if (result.hasErrors()) {
 			return "addOrder";
-		} else {
-			ordersService.save(order);
-			return "redirect:showOrders";
 		}
 
+		int countStock = ordersService.CountStock(order);
+
+		if (countStock < 0) {
+			System.out.println("Estoque " + countStock);
+
+			errorMgs.setMsg("Test Error");
+			
+			return "forward:showError";
+		}
+
+		ordersService.save(order);
+		return "redirect:showOrders";
+
+	}
+
+	@RequestMapping(value = "/showError", method = RequestMethod.GET)
+	public String showError(@ModelAttribute("errorMgs") ErrorMsg errorMgs, @ModelAttribute("order") Order order, HttpServletRequest h) {
+		
+		System.out.println(order.getProd().getpDesc());
+		System.out.println(errorMgs.getMsg());
+		
+		return "showError";
 	}
 
 }
