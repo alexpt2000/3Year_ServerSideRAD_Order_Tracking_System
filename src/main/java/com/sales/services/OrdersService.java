@@ -10,13 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sales.models.Order;
+import com.sales.models.Product;
 import com.sales.repositories.OrdersRepository;
+import com.sales.repositories.ProductsRepository;
 
 @Service
 public class OrdersService {
 
 	@Autowired
 	private OrdersRepository ordersRepository;
+
+	@Autowired
+	private ProductsRepository productsRepository;
 
 	public List<Order> ShowAll() {
 
@@ -27,20 +32,36 @@ public class OrdersService {
 	}
 
 	public Order save(Order order) {
-		//Pass the date into Order Date
+		// Pass the date into Order Date
 		order.setOrderDate(DateFormated());
+
+		setQuantity(order);
 
 		return ordersRepository.save(order);
 	}
-	
-	public String DateFormated(){
+
+	public String DateFormated() {
 		// Formating Date into String
 		String dateFormated;
 		Format formatter;
 		Date date = new Date();
 		formatter = new SimpleDateFormat("yyyy-MM-dd");
-		
+
 		return dateFormated = formatter.format(date);
+	}
+
+	public void setQuantity(Order order) {
+
+		Product product = productsRepository.findOne(order.getProd().getpId());
+
+		int newQty = product.getQtyInStock() - order.getQty();
+
+		// Set the new Stock
+		product.setQtyInStock(newQty);
+
+		// Save the product
+		productsRepository.save(product);
+
 	}
 
 }

@@ -38,27 +38,26 @@ public class MainControllers {
 
 	@Autowired
 	private OrdersService ordersService;
-	
+
 	/*
 	 * logout
 	 * 
-	 * 
+	 * This method force the logout
 	 */
-	@RequestMapping(value = {"/logout"}, method = RequestMethod.GET)
-	public String logoutDo(HttpServletRequest request,HttpServletResponse response){
-	HttpSession session= request.getSession(false);
-	    SecurityContextHolder.clearContext();
-	         session= request.getSession(false);
-	        if(session != null) {
-	            session.invalidate();
-	        }
-	        for(Cookie cookie : request.getCookies()) {
-	            cookie.setMaxAge(0);
-	        }
+	@RequestMapping(value = { "/logout" }, method = RequestMethod.GET)
+	public String logoutDo(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession(false);
+		SecurityContextHolder.clearContext();
+		session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		for (Cookie cookie : request.getCookies()) {
+			cookie.setMaxAge(0);
+		}
 
-	    return "redirect:login?logout";
+		return "redirect:login?logout";
 	}
-	
 
 	/*
 	 * Products

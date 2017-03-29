@@ -13,9 +13,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
   @Override
   public void configure(HttpSecurity httpSecurity) throws Exception{
     httpSecurity.authorizeRequests()
-     //.antMatchers("/index.html", "/showProducts", "/showCustomers", "/showOrders", "/addProduct", "/addCustomer", "/addOrder")
-     //.hasRole("USER")
-    .anyRequest().authenticated()
+     .antMatchers("/showProducts", "/showCustomers", "/showOrders", "/addProduct", "/addCustomer", "/addOrder")
+     .hasRole("USER")
+    .antMatchers("/index.html").permitAll()  // Allow index.html
+    //.anyRequest().authenticated()
      .and()
      .formLogin();
   }
