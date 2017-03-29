@@ -78,6 +78,9 @@
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 
+
+		<!-- ... Security dependency elements ... -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
