@@ -168,26 +168,22 @@ public class MainControllers {
 			return "addOrder";
 		}
 
+		
 		int countStock = ordersService.CountStock(order);
 
 		if (countStock < 0) {
-			System.out.println("Estoque " + countStock);
-
 			errorMgs.setMsg("Test Error");
 			
 			return "forward:showError";
 		}
 
+
 		ordersService.save(order);
 		return "redirect:showOrders";
-
 	}
 
-	@RequestMapping(value = "/showError", method = RequestMethod.GET)
+	@RequestMapping(value = "/showError", method = RequestMethod.POST)
 	public String showError(@ModelAttribute("errorMgs") ErrorMsg errorMgs, @ModelAttribute("order") Order order, HttpServletRequest h) {
-		
-		System.out.println(order.getProd().getpDesc());
-		System.out.println(errorMgs.getMsg());
 		
 		return "showError";
 	}
