@@ -9,8 +9,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sales.models.Customer;
 import com.sales.models.Order;
 import com.sales.models.Product;
+import com.sales.repositories.CustomersRepository;
 import com.sales.repositories.OrdersRepository;
 import com.sales.repositories.ProductsRepository;
 
@@ -23,6 +25,9 @@ public class OrdersService {
 	@Autowired
 	private ProductsRepository productsRepository;
 
+	@Autowired
+	private CustomersRepository customersRepository;
+
 	public List<Order> ShowAll() {
 
 		List<Order> orders = new ArrayList<Order>();
@@ -31,10 +36,12 @@ public class OrdersService {
 		return orders;
 	}
 
+	
+	// Method to format date to pass into the database format yyyy/mm/dd
 	public Order save(Order order) {
 		// Pass the date into Order Date
 		order.setOrderDate(DateFormated());
-	
+
 		setQuantity(order);
 
 		return ordersRepository.save(order);
@@ -50,6 +57,7 @@ public class OrdersService {
 		return dateFormated = formatter.format(date);
 	}
 
+	//Set a new qty for stock
 	public void setQuantity(Order order) {
 		Product product = productsRepository.findOne(order.getProd().getpId());
 		int newQty = product.getQtyInStock() - order.getQty();
@@ -59,13 +67,31 @@ public class OrdersService {
 		// Save the product
 		productsRepository.save(product);
 	}
-	
-	
-	public int CountStock(Order order){
-		Product product = productsRepository.findOne(order.getProd().getpId());
-		int newQty = product.getQtyInStock() - order.getQty();
+
+	public String ValidateOrder(Order order) {
+		String msq = "";
+
+		//find a product
+		Product product = productsRepository.findOne(order.getProd().getpId()); 
 		
-		return newQty;
+		//find a customer
+		Customer customer = customersRepository.findOne(order.getCust().getcId()); 
+
+		if (product == null) { //set a msq for not exist product
+			msq += " No such product: " + order.getProd().getpId();
+		} else { // if product exist will get stock
+			int qty = product.getQtyInStock() - order.getQty();
+
+			if (qty < 0) {
+				msq += " Quantity too Large: Product stock = " + product.getQtyInStock();
+			}
+		}
+
+		if (customer == null) { //set a msq for not exist customer
+			msq += " No such customer: " + order.getCust().getcId();
+		}
+
+		return msq;
 	}
-	
+
 }

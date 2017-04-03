@@ -14,10 +14,10 @@
 
 	<h1>Error Creating the following Order</h1>
 
-	<form:form modelAttribute="errorMgs">
-	
-		<h2>${errorMgs.msg}</h2>
-	
+	<form:form modelAttribute="errMsg">
+
+		<h2>${errMsg.msg}</h2>
+
 	</form:form>
 
 	<form:form modelAttribute="order">

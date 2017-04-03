@@ -32,7 +32,7 @@ import com.sales.services.OrdersService;
 import com.sales.services.ProductsService;
 
 @Controller
-@SessionAttributes(value = {"order", "product", "errorMgs"})
+@SessionAttributes(value = { "order", "product", "errMsg" })
 public class MainControllers {
 
 	@Autowired
@@ -152,39 +152,38 @@ public class MainControllers {
 	@RequestMapping(value = "/addOrder", method = RequestMethod.GET)
 	public String addOrder(ModelMap model) {
 		Order order = new Order();
-		ErrorMsg errorMgs = new ErrorMsg();
-		
+		ErrorMsg errMsg = new ErrorMsg();
+
 		model.addAttribute("order", order);
-		model.addAttribute("errorMgs", errorMgs);
-		
-		
+		model.addAttribute("errMsg", errMsg);
+
 		return "addOrder";
 	}
 
 	@RequestMapping(value = "/addOrder", method = RequestMethod.POST)
-	public String addOrderPost(@ModelAttribute("order") @Valid Order order, BindingResult result, @ModelAttribute("errorMgs") ErrorMsg errorMgs) {
+	public String addOrderPost(@ModelAttribute("order") @Valid Order order, BindingResult result,
+			@ModelAttribute("errMsg") ErrorMsg errMsg) {
 
 		if (result.hasErrors()) {
 			return "addOrder";
 		}
 
-		
-		int countStock = ordersService.CountStock(order);
+		String msg = ordersService.ValidateOrder(order);
 
-		if (countStock < 0) {
-			errorMgs.setMsg("Test Error");
-			
+		if (msg != "") {
+			errMsg.setMsg(msg);
+
 			return "forward:showError";
 		}
-
 
 		ordersService.save(order);
 		return "redirect:showOrders";
 	}
 
 	@RequestMapping(value = "/showError", method = RequestMethod.POST)
-	public String showError(@ModelAttribute("errorMgs") ErrorMsg errorMgs, @ModelAttribute("order") Order order, HttpServletRequest h) {
-		
+	public String showError(@ModelAttribute("errMsg") ErrorMsg errMsg, @ModelAttribute("order") Order order,
+			HttpServletRequest h) {
+
 		return "showError";
 	}
 

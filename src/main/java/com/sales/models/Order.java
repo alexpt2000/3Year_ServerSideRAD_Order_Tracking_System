@@ -14,26 +14,26 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name="ORDERS")
+@Table(name = "ORDERS")
 public class Order {
 	@Id
 	@GeneratedValue
-	@Column(name="OID")
+	@Column(name = "OID")
 	private Long oId;
-	
+
 	@Min(1)
-	@Column(name="QTY")
+	@Column(name = "QTY")
 	private int qty;
-	
-	@Column(name="ORDDATE")
+
+	@Column(name = "ORDDATE")
 	private String orderDate;
 
 	@ManyToOne
-	@JoinColumn(name="cId")
+	@JoinColumn(name = "cId")
 	private Customer cust;
-		
+
 	@ManyToOne
-	@JoinColumn(name="pId")
+	@JoinColumn(name = "pId")
 	private Product prod;
 
 	public Long getoId() {
